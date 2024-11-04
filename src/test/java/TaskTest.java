@@ -3,22 +3,28 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
 public class TaskTest {
 
-    public WebDriver acessar(){
-        WebDriver webDriver = new ChromeDriver();
-        webDriver.navigate().to("http://localhost:8001/tasks");
+    public WebDriver acessar() throws MalformedURLException {
+//        WebDriver webDriver = new ChromeDriver();
+        DesiredCapabilities cap = DesiredCapabilities.chrome();
+        WebDriver webDriver = new RemoteWebDriver( new URL("http://192.168.1.11:4444/wd/hub"),cap);
+        webDriver.navigate().to("http://192.168.1.11:8001/tasks");
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return webDriver;
     }
 
     @Test
-    public void deveSalvaTarefaComSucesso(){
+    public void deveSalvaTarefaComSucesso() throws MalformedURLException {
         WebDriver webDriver = acessar();
         try {
             webDriver.findElement(By.id("addTodo")).click();
@@ -33,7 +39,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvaTarefaSemDescricao(){
+    public void naoDeveSalvaTarefaSemDescricao() throws MalformedURLException {
         WebDriver webDriver = acessar();
         try {
             webDriver.findElement(By.id("addTodo")).click();
@@ -49,7 +55,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvaTarefaSemData(){
+    public void naoDeveSalvaTarefaSemData() throws MalformedURLException {
         WebDriver webDriver = acessar();
         try {
             webDriver.findElement(By.id("addTodo")).click();
@@ -64,7 +70,7 @@ public class TaskTest {
     }
 
     @Test
-    public void naoDeveSalvaTarefaComDataPassada(){
+    public void naoDeveSalvaTarefaComDataPassada() throws MalformedURLException {
         WebDriver webDriver = acessar();
         try{
             webDriver.findElement(By.id("addTodo")).click();
